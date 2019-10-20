@@ -1,0 +1,67 @@
+<script type="text/x-red" data-template-name="cubic-range">
+    <div class="form-row">
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> Property</label>
+        <input type="text" id="node-input-property" style="width:calc(70% - 1px)"/>
+    </div>
+    <br/>
+    <div class="form-row">
+		<label for="node-input-xs"><i class="fa fa-table"></i> x-values</label>
+        <input type="text" id="node-input-xs" style="width:200px;"/>
+    </div>
+    <br/>
+    <div class="form-row">
+		<label for="node-input-ys"><i class="fa fa-table"></i> y-values</label>
+        <input type="text" id="node-input-ys" style="width:200px;"/>
+    </div>
+    <br/>
+    <div class="form-row"><label></label>
+        <input type="checkbox" id="node-input-acceptNewTable" style="display: inline-block; width: auto; vertical-align: top;">
+        <label style="width: auto;" for="node-input-acceptNewTable"> Accept table updates</label></input>
+    </div>
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="cubic-range">
+	<p>Performs mapping of input values to output values with the supplied conversion table. Also performs cubic interpolation for intermediate values.</p>
+	<h3>Details</h3>
+	<p>This node performs a mapping (or range change - see range node) from the specified input property. The mapped value is output to the same property.</p>
+	<p>The x-values represent the input range. The y-value the corresponding output range. Both should be a comma-seperated list of numeric values. Take care that both list have an equal amount of numbers</p>
+	<p>The two lists can be overwritten by a message that contains a table property with an x and y property. Both need to contain an array of numeric values.</p>
+	<p>Messages with topic "newtable" will not get mapped and are used only for updating the internal table.</p>
+	<p>Cubic spline interpolation is done by the <a href="https://www.npmjs.com/package/cubic-spline">cubic-spline</a> package.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('cubic-range', {
+        color: "#E2D96E",
+        category: 'function',
+        defaults: {
+            xs: {value:"",required:true,validate:RED.validators.regex(/^(\s*-?\d+(\.\d+)?)(\s*,\s*-?\d+(\.\d+)?)*$/)},
+            ys: {value:"",required:true,validate:RED.validators.regex(/^(\s*-?\d+(\.\d+)?)(\s*,\s*-?\d+(\.\d+)?)*$/)},
+            acceptNewTable: {value:false},
+            newTableTopic: {value:""},
+            property: {value:"payload",required:true},
+            name: {value:""}
+        },
+        inputs: 1,
+        outputs: 1,
+		icon: "font-awesome/line-chart",
+		color: "#fff0f0",
+		label: function() {
+			return this.name||"cubic range";
+		},
+		labelStyle: function() {
+			return this.name?"node_label_italic":"";
+		},
+        oneditprepare: function() {
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+            $("#node-input-property").typedInput({default:'msg',types:['msg']});
+        }
+    });
+</script>

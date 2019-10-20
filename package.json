@@ -1,0 +1,20 @@
+{
+	"name": "node-red-contrib-cubic-range",
+	"version": "1.0.0",
+	"description": "Maps values from the input to an output value using cubic interpolation of values based on supplied table. Uses cubic-spline by Morgan Herlocker to do the heavy lifting.",
+	"main": "cubic-range-node.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"node-red" : {
+		"nodes": {
+			"cubic-range": "cubic-range-node.js"
+		}
+	},
+	"author": "Jochen Derwae",
+	"license": "MIT",
+	"dependencies": {
+		"cubic-spline": "^2.0.0"
+	},
+	"keywords": [ "node-red" ]
+}
